@@ -1,15 +1,16 @@
 package main
 
-import(
+import (
+	"fmt"
 	"github.com/golang/protobuf/proto"
 	"github.com/liushooter/parim/meituanAdRta"
 	"github.com/liushooter/parim/meituanAdRtaServer"
 )
 
-func main(){
+func main() {
 
 	device := &meituanAdRta.RtaRequest_Device{
-		Os:              RtaRequest_OperatingSystem.Enum(meituanAdRta.RtaRequest_OS_ANDROID),
+		Os:              meituanAdRta.RtaRequest_OperatingSystem.Enum(meituanAdRta.RtaRequest_OS_ANDROID),
 		IdfaMd5Sum:      proto.String(""),
 		ImeiMd5Sum:      proto.String("725e5fa0ebf879a99da9eed8636ef7d2"),
 		AndroidIdMd5Sum: proto.String(""),
@@ -30,7 +31,10 @@ func main(){
 
 	rtaurl := "https://gdtrtbdsp.meituan.com/rta?rta_site_param=netunion_rta"
 
-	rtaResponse = meituanAdRtaServer.Request(rtaurl, rtaRequest)
-	fmt.Printf("RequestId %v, Code %v \n", rtaResponse.GetRequestId(), rtaResponse.GetCode())
+	rtaResponse, err := meituanAdRtaServer.Request(rtaurl, rtaRequest)
+	if err != nil {
+		panic(err)
+	}
 
+	fmt.Printf("RequestId %v, Code %v \n", rtaResponse.GetRequestId(), rtaResponse.GetCode())
 }
