@@ -1,0 +1,70 @@
+// Copyright (c) 2019 Meituan Inc. All rights reserved.
+syntax = "proto2";
+
+package meituanAdRta;
+
+message RtaRequest {
+  // 请求唯一标识
+  optional string id = 1;
+
+  // true表示探测网络延迟
+  optional bool is_ping = 2;
+
+  // true表示测试请求，广告不会被展示和计费
+  optional bool is_test = 3;
+
+  enum OperatingSystem {
+    OS_UNKNOWN = 0;
+    OS_IOS = 1;
+    OS_ANDROID = 2;
+    OS_WINDOWS = 3;
+    OS_SYMBIAN = 4;
+    OS_JAVA = 5;
+  }
+
+  message Device {
+    optional OperatingSystem os = 1;
+
+    // iOS设备的IDFA md5sum
+    optional string idfa_md5sum = 2;
+
+    // Android设备的IMEI md5sum
+    optional string imei_md5sum = 3;
+
+    // Android设备的Android ID
+    optional string android_id_md5sum = 4;
+
+    // ott设备的mac地址
+    optional string mac_md5sum = 5;
+
+    // Android设备的oaid  md5sum
+    optional string oaid_md5sum = 6;
+
+    // 用户IPv4
+    optional string ip = 7;
+
+    // oaid原值
+    optional string oaid = 8;
+
+    // IPv6
+    optional string ipv6 = 9;
+  }
+  optional Device device = 4;
+
+  // 渠道标识
+  optional string site_id = 5;
+}
+
+message RtaResponse {
+  // 来自RtaRequest.id
+  optional string request_id = 1;
+
+  // 返回的状态码，0为选择该流量，非0为过滤，该状态码落地日志，方便定位问题
+  optional uint32 code = 2;
+
+  // 收到RtaRequest至发送完RtaResponse的用时，单位:毫秒
+  optional int32 processing_time_ms = 3;
+
+  // 指定策略id的广告主，当code为0选择该流量时，只选择包含该策略id的所有广告主
+  repeated int64 promotion_target_id = 4 [packed=true];
+}
