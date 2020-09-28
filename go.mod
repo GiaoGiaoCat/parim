@@ -1,4 +1,4 @@
-module github.com/liushooter/parim
+module github.com/GiaoGiaoCat/parim
 
 go 1.12
 
