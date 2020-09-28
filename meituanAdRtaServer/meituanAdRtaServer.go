@@ -7,6 +7,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"time"
 )
 
 func Request(url string, rtaRequest *meituanAdRta.RtaRequest) (*meituanAdRta.RtaResponse, error) {
@@ -16,17 +17,29 @@ func Request(url string, rtaRequest *meituanAdRta.RtaRequest) (*meituanAdRta.Rta
 		return nil, err
 	}
 
-	req, _ := http.NewRequest("POST", url, bytes.NewBuffer(payload))
+	client := &http.Client{
+		Timeout: 60 * time.Second,
+	}
+
+	req, err := http.NewRequest("POST", url, bytes.NewBuffer(payload))
+	if err != nil {
+		log.Fatal("post request error: ", err)
+		return nil, err
+	}
+
 	req.Header.Add("Content-Type", "application/x-protobuf;charset=UTF-8")
 
-	res, _ := http.DefaultClient.Do(req)
+	res, err := client.Do(req)
+	if err != nil {
+		log.Fatal("send post request error: ", err)
+		return nil, err
+	}
 
 	defer res.Body.Close()
-	body, _ := ioutil.ReadAll(res.Body)
+	body, err := ioutil.ReadAll(res.Body)
 
 	rtaResponse := &meituanAdRta.RtaResponse{}
 	err = proto.Unmarshal(body, rtaResponse)
-
 	if err != nil {
 		log.Fatal("RtaResponse unmarshaling error: ", err)
 		return nil, err
