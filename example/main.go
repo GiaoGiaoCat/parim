@@ -2,9 +2,10 @@ package main
 
 import (
 	"fmt"
+
+	"github.com/GiaoGiaoCat/parim/meituanAdRta"
+	"github.com/GiaoGiaoCat/parim/meituanAdRtaServer"
 	"github.com/golang/protobuf/proto"
-	"github.com/liushooter/parim/meituanAdRta"
-	"github.com/liushooter/parim/meituanAdRtaServer"
 )
 
 func main() {
