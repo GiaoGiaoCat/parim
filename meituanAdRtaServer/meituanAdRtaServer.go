@@ -3,7 +3,7 @@ package meituanAdRtaServer
 import (
 	"bytes"
 	"github.com/golang/protobuf/proto"
-	"github.com/liushooter/parim/meituanAdRta"
+	"github.com/GiaoGiaoCat/parim/meituanAdRta"
 	"io/ioutil"
 	"log"
 	"net/http"
